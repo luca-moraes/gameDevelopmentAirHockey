@@ -24,6 +24,12 @@ public class PlayerControls : MonoBehaviour
     Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
     var pos = transform.position;
 
+    if(mousePos.x > 0.005f){
+      pos.x = 0.005f;
+    }else{
+      pos.x = mousePos.x;
+    }
+
     pos.y = mousePos.y;
     transform.position = pos;
   }
