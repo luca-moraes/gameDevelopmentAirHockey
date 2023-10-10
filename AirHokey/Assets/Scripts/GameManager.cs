@@ -8,6 +8,10 @@ public class GameManager : MonoBehaviour
 	public int PlayerScore2 = 0;
 	private int total = 3;
 	private AudioSource scoreSound;
+	private AudioSource winSound;
+	private AudioSource uepa;
+	private AudioSource rapaz;
+	private AudioSource pare;
 
 	public GUISkin layout;
 	GameObject theBall;
@@ -23,6 +27,13 @@ public class GameManager : MonoBehaviour
 	        PlayerScore2++;
 			scoreSound.Play();
 	    }
+
+		if(PlayerScore1 == 1 && PlayerScore2 == 1){
+			rapaz.Play();
+		}
+		if(PlayerScore1 == 2 && PlayerScore2 == 2){
+			uepa.Play();
+		}
 	}
 
 	void showPlacar(){
@@ -46,19 +57,23 @@ public class GameManager : MonoBehaviour
 
 	    if (GUI.Button(new Rect(Screen.width / 2 - 60, 35, 120, 53), "RESTART"))
 	    {
+			pare.Play();
+			win();
+			Invoke("win", 1);
+
 	        zerarPontos();
 	        RestartBalls();
 	    }
 	    if (PlayerScore1 == total){
 			p1 = true;
-			Invoke("timer", 2);
-
+			
+			vitoria();
 			zerarPontos();
 			RestartBalls();
 	    } else if (PlayerScore2 == total){
 			p2 = true;
-			Invoke("timer", 2);
 
+			vitoria();
 			zerarPontos();
 			RestartBalls();
 	    }
@@ -71,16 +86,32 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	public void vitoria(){
+		Invoke("timer", 4);
+		Invoke("win", 3);
+		Invoke("win", 2);
+		Invoke("win", 1);
+	}
+
 	public void timer(){
 		p1 = false;
 		p2 = false;
+	}
+
+	public void win(){
+		winSound.Play();
 	}
 
     // Start is called before the first frame update
     void Start()
     {
         theBall = GameObject.FindGameObjectWithTag("TagBall");
-		scoreSound = GetComponent<AudioSource>();
+		AudioSource[] audios = GetComponents<AudioSource>();
+		scoreSound = audios[0];
+		winSound = audios[1];
+		pare = audios[2];
+		rapaz = audios[3];
+		uepa = audios[4];
     }
 
     // Update is called once per frame
